@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<dleplugin>
+	<name>Theme change</name>
+	<description></description>
+	<icon></icon>
+	<version></version>
+	<dleversion>13</dleversion>
+	<versioncompare>greater</versioncompare>
+	<upgradeurl></upgradeurl>
+	<filedelete>0</filedelete>
+	<needplugin></needplugin>
+	<mnotice>0</mnotice>
+	<mysqlinstall><![CDATA[]]></mysqlinstall>
+	<mysqlupgrade><![CDATA[]]></mysqlupgrade>
+	<mysqlenable><![CDATA[]]></mysqlenable>
+	<mysqldisable><![CDATA[]]></mysqldisable>
+	<mysqldelete><![CDATA[]]></mysqldelete>
+	<phpinstall><![CDATA[]]></phpinstall>
+	<phpupgrade><![CDATA[]]></phpupgrade>
+	<phpenable><![CDATA[]]></phpenable>
+	<phpdisable><![CDATA[]]></phpdisable>
+	<phpdelete><![CDATA[]]></phpdelete>
+	<notice><![CDATA[https://github.com/TeraMoune/Change-theme-lite]]></notice>
+	<file name="engine/modules/main.php">
+		<operation action="after">
+			<searchcode><![CDATA[$tpl->set ( '{speedbar}', $tpl->result['speedbar'] );]]></searchcode>
+			<replacecode><![CDATA[$dark_mode_auto = false;
+if( preg_match('#auto-dark-mode\|#i', $member_id['xfields']) ) {
+  	$dark_mode_auto = true;
+} 
+
+if( $dark_mode_auto ) {
+  
+  	$a_hour = langdate( "G", $_TIME );
+
+  	if( $a_hour >= 0 AND ($a_hour > 20 OR $a_hour < 6) ) {
+		$theme_class = 'dark';
+  	} else $theme_class = '';
+  	$tpl->set_block ( "'\\[dark-mode-auto\\](.*?)\\[/dark-mode-auto\\]'si", "" );
+  
+} else {
+  
+    if( isset($_COOKIE['theme-class']) AND $_COOKIE['theme-class'] == 'dark' ) {
+      $theme_class = totranslit($_COOKIE['theme-class']);
+      $night_mode = " checked";
+    } else { $theme_class = ""; $night_mode = ""; }
+
+    $tpl->set ( '{night-mode}', $night_mode );
+    $tpl->set( '[dark-mode-auto]', "" );
+    $tpl->set( '[/dark-mode-auto]', "" );
+  
+}
+
+$tpl->set ( '{theme-class}', $theme_class );]]></replacecode>
+			<enabled>1</enabled>
+		</operation>
+	</file>
+</dleplugin>
